@@ -5,6 +5,9 @@ import entities.Installment;
 import services.ContractService;
 import services.PaypalService;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -35,11 +38,18 @@ public class Main {
 
         contractService.processContract(contract, instalments);
 
-        System.out.println("--- PARCELAS ---");
+        String destinityPath = "C:\\Users\\ljele\\IdeaProjects\\parcelas.txt";
 
-        for (Installment installment : contract.getInstallments()) {
-            System.out.println(installment + "\n");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(destinityPath))) {
+            for (Installment installment : contract.getInstallments()) {
+                bw.write(  installment + "\n");
+                bw.newLine();
+            }
+
+        } catch (IOException e){
+            System.out.println(e.getMessage());
         }
+
         sc.close();
     }
 
